@@ -27,8 +27,9 @@
 # URLs:
 #   /hubot/scores[?name=<name>][&direction=<top|botton>][&limit=<10>]
 #
-# Author:
-#   ajacksified
+# Originally forked from:
+#   ajacksified/hubot-plusplus
+
 
 
 _ = require('underscore')

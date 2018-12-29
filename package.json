@@ -1,25 +1,26 @@
 {
-  "name": "hubot-plusplus",
-  "version": "1.4.0",
-  "description": "A hubot script for adding or removing points",
+  "name": "hubot-mega-plusplus",
+  "version": "1.0.0",
+  "description": "A hubot script for adding or removing points, in a more Hipchat Karma bot way",
   "main": "index.coffee",
   "scripts": {
     "test": "mocha --compilers coffee:coffee-script --recursive ./test"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/ajacksified/hubot-plusplus.git"
+    "url": "git://github.com/jetpackworkflow/hubot-mega-plusplus.git"
   },
   "keywords": [
     "hubot",
     "points",
     "plus",
-    "karma"
+    "karma",
+    "hipchat"
   ],
-  "author": "Jack Lawson <https://github.com/ajacksified>",
+  "author": "jetpackworkflow <https://github.com/jetpackworkflow>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ajacksified/hubot-plusplus/issues"
+    "url": "https://github.com/jetpackworkflow/hubot-mega-plusplus/issues"
   },
   "dependencies": {
     "coffee-script": "~1.6",
