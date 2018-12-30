@@ -45,17 +45,16 @@ module.exports = (robot) ->
 
   # sweet regex bro
   robot.hear ///
-    # from beginning of line
-    ^
-    # the thing being upvoted, which is any number of words and spaces
-    ([\s\w'@.\-:\u3040-\u30FF\uFF01-\uFF60\u4E00-\u9FA0]*)
+    # the thing being upvoted, which is any number of words.
+    # Internal Spaces are allowed only when quoted.
+    # Internal +. - allowed
+    ((?:[\w@.\-:\u3040-\u30FF\uFF01-\uFF60\u4E00-\u9FA0]+(?<![+-]))|(?:['"][^'"]*['"]))
     # allow for spaces after the thing being upvoted (@user ++)
     \s*
     # the increment/decrement operator ++ or --
     (\+\+|--|—)
     # optional reason for the plusplus
     (?:\s+(?:#{reasonConjunctions})\s+(.+))?
-    $ # end of line
   ///i, (msg) ->
     # let's get our local vars in place
     [dummy, name, operator, reason] = msg.match
@@ -67,9 +66,9 @@ module.exports = (robot) ->
 
     if name
       if name.charAt(0) == ':'
-        name = (name.replace /(^\s*@)|([,\s]*$)/g, '').trim().toLowerCase()
+        name = (name.replace /(^\s*['"@])|([,'"\s]*$)/g, '').trim().toLowerCase()
       else
-        name = (name.replace /(^\s*@)|([,:\s]*$)/g, '').trim().toLowerCase()
+        name = (name.replace /(^\s*['"@])|([,:'"\s]*$)/g, '').trim().toLowerCase()
 
     # check whether a name was specified. use MRU if not
     unless name? && name != ''
@@ -110,12 +109,11 @@ module.exports = (robot) ->
       }
 
   robot.respond ///
-    (?:erase )
+    (?:erase\s+)
     # thing to be erased
-    ([\s\w'@.-:\u3040-\u30FF\uFF01-\uFF60\u4E00-\u9FA0]*)
-    # optionally erase a reason from thing
+    ((?:[\w@.\-:\u3040-\u30FF\uFF01-\uFF60\u4E00-\u9FA0]+(?<![+-]))|(?:['"][^'"]*['"]))
+    # # optionally erase a reason from thing
     (?:\s+(?:for|because|cause|cuz)\s+(.+))?
-    $ # eol
   ///i, (msg) ->
     [__, name, reason] = msg.match
     from = msg.message.user.name.toLowerCase()
@@ -125,9 +123,9 @@ module.exports = (robot) ->
 
     if name
       if name.charAt(0) == ':'
-        name = (name.replace /(^\s*@)|([,\s]*$)/g, '').trim().toLowerCase()
+        name = (name.replace /(^\s*['"@])|([,'"\s]*$)/g, '').trim().toLowerCase()
       else
-        name = (name.replace /(^\s*@)|([,:\s]*$)/g, '').trim().toLowerCase()
+        name = (name.replace /(^\s*['"@])|([,:'"\s]*$)/g, '').trim().toLowerCase()
 
     isAdmin = @robot.auth?.hasRole(user, 'plusplus-admin') or @robot.auth?.hasRole(user, 'admin')
 
@@ -142,6 +140,8 @@ module.exports = (robot) ->
                 else
                   "Erased points for #{name}"
       msg.send message
+    else
+      msg.send "Could not erase points for #{name}"
 
   # Catch the message asking for the score.
   robot.respond new RegExp("(?:" + scoreKeyword + ") (for\s)?(.*)", "i"), (msg) ->
@@ -149,9 +149,10 @@ module.exports = (robot) ->
 
     if name
       if name.charAt(0) == ':'
-        name = (name.replace /(^\s*@)|([,\s]*$)/g, '')
+        name = (name.replace /(^\s*['"@])|([,'"\s]*$)/g, '').trim().toLowerCase()
       else
-        name = (name.replace /(^\s*@)|([,:\s]*$)/g, '')
+        name = (name.replace /(^\s*['"@])|([,:'"\s]*$)/g, '').trim().toLowerCase()
+
 
     console.log(name)
 

@@ -16,7 +16,8 @@ What makes (or will make) this different from the original hubot-plusplus?
 API
 ---
 
-* `thing++` - add a point to `thing`
+* `you are the best thing++` - add a point to `thing`
+* `'taco tuesday'++` - add a point to 'taco tuesday'
 * `++` - add a point to the most previously voted-on thing
 * `thing++ for stuff` - keep track of why you gave thing points
 * `thing--` - remove a point from `thing`
