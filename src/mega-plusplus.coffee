@@ -41,6 +41,7 @@ module.exports = (robot) ->
   scoreKeeper = new ScoreKeeper(robot)
   scoreKeyword   = process.env.HUBOT_PLUSPLUS_KEYWORD or 'score'
   reasonsKeyword = process.env.HUBOT_PLUSPLUS_REASONS or 'raisins'
+  maxPoints = process.env.HUBOT_PLUSPLUS_MAX_POINTS or 5
   reasonConjunctions = process.env.HUBOT_PLUSPLUS_CONJUNCTIONS or 'for|because|cause|cuz|as'
 
   # sweet regex bro
@@ -52,7 +53,7 @@ module.exports = (robot) ->
     # allow for spaces after the thing being upvoted (@user ++)
     \s*
     # the increment/decrement operator ++ or --
-    (\+\+|--|—)
+    (\+{2,}|-{2,})
     # optional reason for the plusplus
     (?:\s+(?:#{reasonConjunctions})\s+(.+))?
   ///i, (msg) ->
@@ -76,10 +77,12 @@ module.exports = (robot) ->
       reason = lastReason if !reason? && lastReason?
 
     # do the {up, down}vote, and figure out what the new score is
-    [score, reasonScore] = if operator == "++"
-              scoreKeeper.add(name, from, room, reason)
+    requestedMagnitude = (operator.length - 1)
+    magnitude = Math.min(requestedMagnitude, maxPoints)
+    [score, reasonScore] = if operator.charAt(0) == "+"
+              scoreKeeper.addX(name, from, magnitude, room, reason)
             else
-              scoreKeeper.subtract(name, from, room, reason)
+              scoreKeeper.subtractX(name, from, magnitude, room, reason)
 
     # if we got a score, then display all the things and fire off events!
     if score?

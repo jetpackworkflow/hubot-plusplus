@@ -6,12 +6,10 @@ Give (or take away) points from people and things, all from the comfort of your
 personal Hubot.
 
 What makes (or will make) this different from the original hubot-plusplus?
-- Aims to incorporate some of the features of the Hipchat Karma bot
+
+This package allows input closer to that accepted by the Hipchat Bot Karma
     + Flexibility of input (arbitrary text before/after "thing++")
     + Add and remote multiple points at once
-- Admin support
-    + Only admins can erase things
-    + Set arbitrary point values for things
 
 API
 ---

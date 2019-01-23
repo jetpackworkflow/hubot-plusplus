@@ -38,28 +38,34 @@ class ScoreKeeper
     [@storage.scores[user], @storage.reasons[user][reason] || "none"]
 
   add: (user, from, room, reason) ->
+    @addX(user, from, 1, room, reason)
+
+  addX: (user, from, magnitude, room, reason) ->
     if @validate(user, from)
       user = @getUser(user)
-      @storage.scores[user]++
+      @storage.scores[user] = @storage.scores[user] + magnitude
       @storage.reasons[user] ||= {}
 
       if reason
         @storage.reasons[user][reason] ||= 0
-        @storage.reasons[user][reason]++
+        @storage.reasons[user][reason] += magnitude
 
       @saveUser(user, from, room, reason)
     else
       [null, null]
 
   subtract: (user, from, room, reason) ->
+    @subtractX(user, from, 1, room, reason)
+
+  subtractX: (user, from, magnitude, room, reason) ->
     if @validate(user, from)
       user = @getUser(user)
-      @storage.scores[user]--
+      @storage.scores[user] = @storage.scores[user] - magnitude
       @storage.reasons[user] ||= {}
 
       if reason
         @storage.reasons[user][reason] ||= 0
-        @storage.reasons[user][reason]--
+        @storage.reasons[user][reason] -= magnitude
 
       @saveUser(user, from, room, reason)
     else
