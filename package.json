@@ -17,7 +17,7 @@
     "karma",
     "hipchat"
   ],
-  "author": "jetpackworkflow <https://github.com/jetpackworkflow>",
+  "author": "regentgal <https://github.com/regentgal>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jetpackworkflow/hubot-mega-plusplus/issues"
