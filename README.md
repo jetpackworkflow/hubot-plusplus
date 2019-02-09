@@ -21,6 +21,7 @@ API
 * `thing--` - remove a point from `thing`
 * `--` - remove a point from the most previously voted-on thing
 * `thing-- for stuff` - keep track of why you removed thing points
+* `@me++` - get scolded (via configurable `SELF_KARMA_SCOLDING` message) for attempting to add a point to oneself
 * `hubot erase thing` - erase thing from scoreboard (permanently deletes thing from memory)
 * `hubot erase thing for reason` erase given reason from thing's score board (does not deduct from total score)
 * `hubot top 10` - show the top 10, with a graph of points

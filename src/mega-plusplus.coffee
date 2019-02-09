@@ -43,6 +43,7 @@ module.exports = (robot) ->
   reasonsKeyword = process.env.HUBOT_PLUSPLUS_REASONS or 'raisins'
   maxPoints = process.env.HUBOT_PLUSPLUS_MAX_POINTS or 5
   reasonConjunctions = process.env.HUBOT_PLUSPLUS_CONJUNCTIONS or 'for|because|cause|cuz|as'
+  selfKarmaScolding = process.env.SELF_KARMA_SCOLDING or 'Did you really just try to give yourself karma?  REALLY?!'
 
   # sweet regex bro
   robot.hear ///
@@ -110,6 +111,8 @@ module.exports = (robot) ->
         reason:    reason
         from:      from
       }
+    else if name == from
+      msg.send selfKarmaScolding
 
   robot.respond ///
     (?:erase\s+)
