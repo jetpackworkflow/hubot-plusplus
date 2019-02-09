@@ -18,6 +18,7 @@ API
 * `'taco tuesday'++` - add a point to 'taco tuesday'
 * `++` - add a point to the most previously voted-on thing
 * `thing++ for stuff` - keep track of why you gave thing points
+* `thing+++++++` - adding more than `HUBOT_PLUSPLUS_MAX_POINTS` points will be capped at the max and a `HUBOT_PLUSPLUS_KILLJOY_MESSAGE` will be appended to the updated score.
 * `thing--` - remove a point from `thing`
 * `--` - remove a point from the most previously voted-on thing
 * `thing-- for stuff` - keep track of why you removed thing points

@@ -43,6 +43,7 @@ module.exports = (robot) ->
   reasonsKeyword = process.env.HUBOT_PLUSPLUS_REASONS or 'raisins'
   maxPoints = process.env.HUBOT_PLUSPLUS_MAX_POINTS or 5
   reasonConjunctions = process.env.HUBOT_PLUSPLUS_CONJUNCTIONS or 'for|because|cause|cuz|as'
+  killjoyMessage = process.env.HUBOT_PLUSPLUS_KILLJOY_MESSAGE or 'Killjoy Mode™ has enforced a maximum change of ' + maxPoints  + ' points'
 
   # sweet regex bro
   robot.hear ///
@@ -101,6 +102,8 @@ module.exports = (robot) ->
                     "#{name} has #{score} points"
 
 
+      if requestedMagnitude > maxPoints
+        message = message + " (" + killjoyMessage + ")."
       msg.send message
 
       robot.emit "plus-one", {
