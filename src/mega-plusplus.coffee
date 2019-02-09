@@ -43,6 +43,8 @@ module.exports = (robot) ->
   reasonsKeyword = process.env.HUBOT_PLUSPLUS_REASONS or 'raisins'
   maxPoints = process.env.HUBOT_PLUSPLUS_MAX_POINTS or 5
   reasonConjunctions = process.env.HUBOT_PLUSPLUS_CONJUNCTIONS or 'for|because|cause|cuz|as'
+  selfKarmaScolding = process.env.SELF_KARMA_SCOLDING or 'Did you really just try to give yourself karma?  REALLY?!'
+  humilityScolding = process.env.HUMILITY_SCOLDING or 'There there, buddy... it\'s gonna be all right.'
 
   # sweet regex bro
   robot.hear ///
@@ -79,7 +81,8 @@ module.exports = (robot) ->
     # do the {up, down}vote, and figure out what the new score is
     requestedMagnitude = (operator.length - 1)
     magnitude = Math.min(requestedMagnitude, maxPoints)
-    [score, reasonScore] = if operator.charAt(0) == "+"
+    wasAPositiveChange = operator.charAt(0) == "+"
+    [score, reasonScore] = if wasAPositiveChange
               scoreKeeper.addX(name, from, magnitude, room, reason)
             else
               scoreKeeper.subtractX(name, from, magnitude, room, reason)
@@ -110,6 +113,12 @@ module.exports = (robot) ->
         reason:    reason
         from:      from
       }
+    else if name == from
+      if wasAPositiveChange
+        msg.send selfKarmaScolding
+      else
+        msg.send humilityScolding
+
 
   robot.respond ///
     (?:erase\s+)
