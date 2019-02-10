@@ -37,30 +37,33 @@ clark = require('clark')
 querystring = require('querystring')
 ScoreKeeper = require('./scorekeeper')
 
-module.exports = (robot) ->
-  scoreKeeper = new ScoreKeeper(robot)
+class ParseKarma
   scoreKeyword   = process.env.HUBOT_PLUSPLUS_KEYWORD or 'score'
   reasonsKeyword = process.env.HUBOT_PLUSPLUS_REASONS or 'raisins'
   maxPoints = process.env.HUBOT_PLUSPLUS_MAX_POINTS or 5
   reasonConjunctions = process.env.HUBOT_PLUSPLUS_CONJUNCTIONS or 'for|because|cause|cuz|as'
 
-  # sweet regex bro
-  robot.hear ///
-    # the thing being upvoted, which is any number of words.
-    # Internal Spaces are allowed only when quoted.
-    # Internal +. - allowed
-    ((?:[\w@.\-:\u3040-\u30FF\uFF01-\uFF60\u4E00-\u9FA0]+(?<![+-]))|(?:['"][^'"]*['"]))
-    # allow for spaces after the thing being upvoted (@user ++)
-    \s*
-    # the increment/decrement operator ++ or --
-    (\+{2,}|-{2,})
-    # optional reason for the plusplus
-    (?:\s+(?:#{reasonConjunctions})\s+(.+))?
-  ///i, (msg) ->
+  doKarma: (messageObj, inputMessage, reasonConjunctions, robot) ->
+    scoreKeeper = new ScoreKeeper(robot)
+
+    msg = inputMessage.match(///
+      # the thing being upvoted, which is any number of words.
+      # Internal Spaces are allowed only when quoted.
+      # Internal +. - allowed
+      ((?:[\w@.\-:\u3040-\u30FF\uFF01-\uFF60\u4E00-\u9FA0]+(?<![+-]))|(?:['"][^'"]*['"]))
+      # allow for spaces after the thing being upvoted (@user ++)
+      \s*
+      # the increment/decrement operator ++ or --
+      (\+{2,}|-{2,})
+      # optional reason for the plusplus
+      (?:\s+(?:#{reasonConjunctions})\s+(.+))?
+    ///i)
+
     # let's get our local vars in place
-    [dummy, name, operator, reason] = msg.match
-    from = msg.message.user.name.toLowerCase()
-    room = msg.message.room
+    [dummy, name, operator, reason] = msg
+
+    from = messageObj.message.user.name.toLowerCase()
+    room = messageObj.message.room
 
     # do some sanitizing
     reason = reason?.trim().toLowerCase()
@@ -101,7 +104,7 @@ module.exports = (robot) ->
                     "#{name} has #{score} points"
 
 
-      msg.send message
+      messageObj.send message
 
       robot.emit "plus-one", {
         name:      name
@@ -110,6 +113,31 @@ module.exports = (robot) ->
         reason:    reason
         from:      from
       }
+
+module.exports = (robot) ->
+  scoreKeeper = new ScoreKeeper(robot)
+  scoreKeyword   = process.env.HUBOT_PLUSPLUS_KEYWORD or 'score'
+  reasonsKeyword = process.env.HUBOT_PLUSPLUS_REASONS or 'raisins'
+  maxPoints = process.env.HUBOT_PLUSPLUS_MAX_POINTS or 5
+  reasonConjunctions = process.env.HUBOT_PLUSPLUS_CONJUNCTIONS or 'for|because|cause|cuz|as'
+
+  parseKarma = new ParseKarma(robot)
+
+  # sweet regex bro
+  robot.hear ///
+    # the thing being upvoted, which is any number of words.
+    # Internal Spaces are allowed only when quoted.
+    # Internal +. - allowed
+    ((?:[\w@.\-:\u3040-\u30FF\uFF01-\uFF60\u4E00-\u9FA0]+(?<![+-]))|(?:['"][^'"]*['"]))
+    # allow for spaces after the thing being upvoted (@user ++)
+    \s*
+    # the increment/decrement operator ++ or --
+    (\+{2,}|-{2,})
+    # optional reason for the plusplus
+    (?:\s+(?:#{reasonConjunctions})\s+(.+))?
+  ///i, (msg) ->
+
+    parseKarma.doKarma(msg, msg.message, reasonConjunctions, robot)
 
   robot.respond ///
     (?:erase\s+)
