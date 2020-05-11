@@ -4,7 +4,7 @@
   "description": "A hubot script for adding or removing points, in a more Hipchat Karma bot way",
   "main": "index.coffee",
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script --recursive ./test"
+    "test": "mocha --require coffeescript/register --recursive ./test/**/*.coffee"
   },
   "repository": {
     "type": "git",
@@ -23,14 +23,14 @@
     "url": "https://github.com/jetpackworkflow/hubot-mega-plusplus/issues"
   },
   "dependencies": {
-    "coffee-script": "~1.6",
+    "coffeescript": "~2.5.1",
     "underscore": ">= 1.0",
     "clark": "0.0.6"
   },
   "devDependencies": {
-    "mocha": "*",
     "chai": "*",
-    "sinon-chai": "*",
-    "sinon": "*"
+    "mocha": "*",
+    "sinon": "*",
+    "sinon-chai": "*"
   }
 }
