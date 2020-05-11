@@ -1,6 +1,6 @@
 {
   "name": "hubot-mega-plusplus",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A hubot script for adding or removing points, in a more Hipchat Karma bot way",
   "main": "index.coffee",
   "scripts": {
