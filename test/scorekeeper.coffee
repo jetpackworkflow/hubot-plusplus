@@ -76,6 +76,18 @@ describe 'ScoreKeeper', ->
       p2 = s.scoreForUser('to')
       expect(p2).to.equal(0)
 
+    it 'erases all users from the scoreboard', ->
+      p = s.add('user1', 'from', 'room')
+      p = s.add('user3', 'from', 'room')
+      p = s.add('user3', 'from', 'room')
+
+      r = s.eraseAllScores()
+
+      expect(r).to.equal(true)
+      expect(s.scoreForUser('user1')).to.equal(0)
+      expect(s.scoreForUser('user2')).to.equal(0)
+      expect(s.scoreForUser('user3')).to.equal(0)
+
   describe 'scores', ->
     it 'returns the score for a user', ->
       s.add('to', 'from', 'room')

@@ -23,6 +23,7 @@ API
 * `thing-- for stuff` - keep track of why you removed thing points
 * `hubot erase thing` - erase thing from scoreboard (permanently deletes thing from memory)
 * `hubot erase thing for reason` erase given reason from thing's score board (does not deduct from total score)
+* `hubot delete all scores` - deletes all scores from scoreboard (permanently deletes from memory)
 * `hubot top 10` - show the top 10, with a graph of points
 * `hubot score thing` - check the score for and reasons for `thing`
 
