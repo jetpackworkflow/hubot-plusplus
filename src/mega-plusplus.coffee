@@ -45,7 +45,7 @@ module.exports = (robot) ->
   reasonConjunctions = process.env.HUBOT_PLUSPLUS_CONJUNCTIONS or 'for|because|cause|cuz|as'
 
   # sweet regex bro
-  robot.hear ///
+  plusPlusRegex = ///
     # the thing being upvoted, which is any number of words.
     # Internal Spaces are allowed only when quoted.
     # Internal +. - allowed
@@ -55,10 +55,10 @@ module.exports = (robot) ->
     # the increment/decrement operator ++ or --
     (\+{2,}|-{2,})
     # optional reason for the plusplus
-    (?:\s+(?:#{reasonConjunctions})\s+(.+))?
-  ///i, (msg) ->
-    # let's get our local vars in place
-    [dummy, name, operator, reason] = msg.match
+    (?:\s+(?:#{reasonConjunctions})\s+([^@+-]+\b(?!\s?(?:\+{2,}|\-{2,}))))?
+  ///i
+
+  scoreAndSendMessage = (msg, name, operator, reason) ->
     from = msg.message.user.name.toLowerCase()
     room = msg.message.room
 
@@ -100,7 +100,6 @@ module.exports = (robot) ->
                   else
                     "#{name} has #{score} points"
 
-
       msg.send message
 
       robot.emit "plus-one", {
@@ -110,6 +109,12 @@ module.exports = (robot) ->
         reason:    reason
         from:      from
       }
+
+  robot.hear(new RegExp(plusPlusRegex, 'ig'), (msg) ->
+    msg.match.forEach (match) ->
+      [_fullMatch, name, operator, reason] = match.match(plusPlusRegex)
+      scoreAndSendMessage(msg, name, operator, reason)
+    )
 
   robot.respond ///
     (?:erase\s+)
